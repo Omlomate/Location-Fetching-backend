@@ -1,4 +1,3 @@
-// src/index.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -11,13 +10,13 @@ dotenv.config();
 const app = express();
 
 // Middleware
-// Allow multiple origins
-const allowedOrigins = ['http://localhost:3000', 'https://location-fetching-backend.onrender.com'];
+// Allow the frontend domain as the allowed origin
+const allowedOrigins = ['https://location-tracker-frontend.onrender.com'];
 
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
-      // Allow the request if it's from one of the allowed origins or if it's a direct request (e.g., Postman)
+      // Allow the request if it's from one of the allowed origins
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -26,6 +25,7 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 app.use(bodyParser.json());
 
 // Connect to MongoDB
