@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const requestIp = require('request-ip'); // You can use this to get the user's IP address
 const LoginLog = require('../models/LoginLog'); // Make sure this is correctly imported
+const geoip = require('geoip-lite');
 
 
 const router = express.Router();
