@@ -11,9 +11,19 @@ dotenv.config();
 const app = express();
 
 // Middleware
+// Allow multiple origins
+const allowedOrigins = ['http://localhost:3000', 'https://location-fetching-backend.onrender.com'];
+
 app.use(cors({
-  origin: 'https://location-fetching-backend.onrender.com', // Replace with your deployed frontend URL
-  methods: ['GET', 'POST'],
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      // Allow the request if it's from one of the allowed origins or if it's a direct request (e.g., Postman)
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(bodyParser.json());
