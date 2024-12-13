@@ -30,10 +30,16 @@ router.post('/login', async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ error: 'User does not exist' });
+    if (!user) {
+      console.error('User not found for email:', email); // Log error
+      return res.status(400).json({ error: 'User does not exist' });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: 'Invalid credentials' });
+    if (!isMatch) {
+      console.error('Invalid credentials for user:', email); // Log error
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
 
     // Generate token with user data (including isAdmin)
     const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -51,9 +57,11 @@ router.post('/login', async (req, res) => {
     // Send token and isAdmin info
     res.status(200).json({ token, userId: user._id, isAdmin: user.isAdmin });
   } catch (err) {
+    console.error('Login error:', err); // Log error
     res.status(500).json({ error: 'Error logging in' });
   }
 });
+
 
 
 module.exports = router;
