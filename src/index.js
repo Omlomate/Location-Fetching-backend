@@ -9,6 +9,9 @@ dotenv.config();
 
 const app = express();
 
+app.options('*', cors()); // Allows all preflight requests
+
+
 // Middleware
 // Allow the frontend domain as the allowed origin
 const allowedOrigins = ['https://location-tracker-frontend.onrender.com'];
